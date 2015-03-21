@@ -1,5 +1,7 @@
 package finaltwo;
 
+import finaltwo.ants.Ant;
+
 /**
  * Created by Sebastian on 19-Mar-15
  *
@@ -8,13 +10,10 @@ package finaltwo;
  */
 public class Field {
     private Field north;
-    private Field northeast;
     private Field east;
-    private Field southeast;
     private Field south;
-    private Field southwest;
     private Field west;
-    private Field nortwest;
+    private int[] coordinates = new int[2];
 
     private int color = 0;
     private boolean isObstacle;
@@ -27,11 +26,15 @@ public class Field {
      * @param obstacle isObstacle
      * @param occupied isOccupied
      * @param occupiedBy if occupied, else null;
+     * @param line line (for coordinates)
+     * @param position position (for coordinates)
      */
-    public Field(int color, boolean obstacle, boolean occupied, Ant occupiedBy) {
+    public Field(int color, boolean obstacle, boolean occupied, Ant occupiedBy, int line, int position) {
         this.color = color;
         this.isObstacle = obstacle;
         this.isOccupied = occupied;
+        this.coordinates[0] = line;
+        this.coordinates[1] = position;
 
         if (this.isOccupied) {
             this.occupiedBy = occupiedBy;
@@ -47,12 +50,28 @@ public class Field {
         return (!isObstacle && !isOccupied);
     }
 
+    public void reColor() {
+        this.color = (4 * this.color + 23) % 5;
+    }
+
+
     public int getColor() {
         return color;
     }
 
+    /**
+     * Sets the initial color
+     * @param color initial color
+     */
     public void setColor(int color) {
         this.color = color;
+    }
+
+    public String toString() {
+        if (isObstacle) return "*";
+        if (isOccupied) return occupiedBy.toString();
+
+        return Integer.toString(color);
     }
 
     public Ant getOccupiedBy() {
@@ -73,11 +92,7 @@ public class Field {
     }
 
     public Field getNortheast() {
-        return northeast;
-    }
-
-    public void setNortheast(Field northeast) {
-        this.northeast = northeast;
+        return north.getEast();
     }
 
     public Field getEast() {
@@ -89,11 +104,7 @@ public class Field {
     }
 
     public Field getSoutheast() {
-        return southeast;
-    }
-
-    public void setSoutheast(Field southeast) {
-        this.southeast = southeast;
+        return south.getEast();
     }
 
     public Field getSouth() {
@@ -105,11 +116,7 @@ public class Field {
     }
 
     public Field getSouthwest() {
-        return southwest;
-    }
-
-    public void setSouthwest(Field southwest) {
-        this.southwest = southwest;
+        return south.getWest();
     }
 
     public Field getWest() {
@@ -121,10 +128,10 @@ public class Field {
     }
 
     public Field getNortwest() {
-        return nortwest;
+        return north.getWest();
     }
 
-    public void setNortwest(Field nortwest) {
-        this.nortwest = nortwest;
+    public int[] getCoordinates() {
+        return coordinates;
     }
 }

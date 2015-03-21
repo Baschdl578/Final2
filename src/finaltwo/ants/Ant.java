@@ -1,5 +1,8 @@
-package finaltwo;
+package finaltwo.ants;
 
+
+import finaltwo.Field;
+import finaltwo.Main;
 
 /**
  * Created by Sebastian on 19-Mar-15
@@ -7,56 +10,53 @@ package finaltwo;
  * @author Sebastian Schindler
  * @version 1.0
  */
-public class Ant {
+public abstract class Ant implements Comparable<Ant> {
+    private char name;
     private int direction; //0 is facing north
     private Field position;
-    private int speed;
-    private boolean isSlow;
-    private int timeSinceMove;
 
     /**
      * Constructor for manual creation with speed set
      * @param direction direction in which the Ant points
-     * @param position Position of the Ant
-     * @param speed speed factor of the Ant
-     * @param isSlow true if lazy Ant, otherwise sporty is assumed, normal is created by speed = 1
+     * @param name Name of the ant
      */
-    public Ant(int direction, Field position, int speed, boolean isSlow) {
+    public Ant(int direction, char name) {
         this.direction = direction;
-        this.position = position;
-        this.speed = speed;
-        this.isSlow = isSlow;
-        this.timeSinceMove = this.speed;
+        char lowerName = Character.toLowerCase(name);
+        this.name = lowerName;
+    }
 
+    /**
+     * Compares this Ant with the specified Ant for order.
+     * Returns a negative integer, zero, or a positive integer as this Ant's name is less than, equal to, or greater
+     * than that of the specified Ant.
+     * @param a Ant to be compared to
+     * @return a negative integer, zero, or a positive integer
+     */
+    public int compareTo(Ant a) {
+        Character charA = new Character(a.getName());
+        Character charB = new Character(this.getName());
+
+        return charB.compareTo(charA);
     }
 
     /**
      * Moves the Ant
      */
-    public void move() {
-        if (isSlow && timeSinceMove != speed) {
-            timeSinceMove++;
-        } else {
-            int reps = speed;
-            if (isSlow) {
-                timeSinceMove = 1;
-                reps = 1;
-            }
-            for (int i = 0; i < reps; i++) {
-                step();
-            }
+    public abstract void move();
 
-        }
-    }
-
-    private void step() {
+    /**
+     * Performs actual movement of the Ant
+     * Call move() for type specific movement
+     */
+    void step() {
         Field next = getNextField();
         if (next != null && next != position) {
             position.setOccupiedBy(null);
             next.setOccupiedBy(this);
             this.position = next;
             this.direction = Main.getTurningRules().getNewDirection(this.position.getColor(), this.direction);
-            this.position.setColor((4 * this.position.getColor() + 23) % 5);
+            this.position.reColor();
             return;
         }
         if (next == null) { //This means the Ant is off the board
@@ -64,6 +64,7 @@ public class Ant {
             return;
         }
         this.direction = Main.getTurningRules().getNewDirection(this.position.getColor(), this.direction);
+        this.position.reColor();
     }
 
     private Field getNextField() {
@@ -97,13 +98,35 @@ public class Ant {
                 next = position;
         }
 
+        if (next == null) {
+            return null;
+        }
+
         if (!next.canEnter()) {
             next = position;
         }
         return next;
     }
 
+    /**
+     * Gets the direction in an human-readable Format
+     * @return N, NO, O, SO, S, SW, W, or NW
+     */
+    public String getHumanDirection() {
+        if (direction == 0) return "N";
+        if (direction == 45) return "NO";
+        if (direction == 90) return "O";
+        if (direction == 135) return "SO";
+        if (direction == 180) return "S";
+        if (direction == 225) return "SW";
+        if (direction == 270) return "W";
+        if (direction == 315) return "NW";
+        return "-1";
+    }
 
+    public String toString() {
+        return "" + this.name;
+    }
 
 
 //GETTER AND SETTER:
@@ -125,19 +148,11 @@ public class Ant {
         this.direction = direction;
     }
 
-    public int getSpeed() {
-        return speed;
+    public char getName() {
+        return name;
     }
 
-    public void setSpeed(int speed) {
-        this.speed = speed;
-    }
-
-    public boolean isSlow() {
-        return isSlow;
-    }
-
-    public void setSlow(boolean isSlow) {
-        this.isSlow = isSlow;
+    public void setName(char name) {
+        this.name = name;
     }
 }

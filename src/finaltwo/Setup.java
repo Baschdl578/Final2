@@ -1,6 +1,9 @@
 package finaltwo;
 
 import edu.kit.informatik.FileInputHelper;
+import finaltwo.ants.LazyAnt;
+import finaltwo.ants.SportyAnt;
+import finaltwo.ants.StandardAnt;
 import finaltwo.messages.Output;
 
 /**
@@ -13,19 +16,63 @@ public class Setup {
 
     private static String[] file;
 
-    public void setup(String filepath) {
+    /**
+     * Sets the game up from input file
+     * @param filepath input file
+     * @return Top left field
+     */
+    public static Field setup(String filepath) {
         file = FileInputHelper.read(filepath);
-        checkfile();
+        checkFile();
+
+        Field topLeft = null;
+        Field current;
+        for (int i = 0; i < file.length; i++) {
+            int j = 0;
+            current = topLeft;
+            while (j < i && current != null) {
+                current = current.getSouth();
+                j++;
+            }
+            char[] chars = file[i].toCharArray();
+            for (int k = 0; k < chars.length; k++) {
+                Field newField = createField(chars[k], i, k);
+                if (k == 0 && topLeft != null) {
+                    Field left = topLeft;
+                    while (left.getSouth() != null) {
+                        left = left.getSouth();
+                    }
+                    newField.setNorth(left);
+                    left.setSouth(newField);
+                }
+
+                if (k != 0) {
+                    current.setEast(newField);
+                    newField.setWest(current);
+                }
+
+                if (i == 0 && k == 0) {
+                    topLeft = newField;
+                }
+                current = newField;
+            }
+        }
+        interlinkRows(topLeft);
+        return topLeft;
     }
 
-    private void checkfile() {
+    /**
+     * Checks the read file for errors
+     */
+    private static void checkFile() {
         String regex = "[0-4a-zA-Z\\*]*";
+        String ants = "";
         int length = -1;
-        for (String line: file) {
 
+        for (String line: file) {
             if (length != -1) {
                 if (line.length() != length) {
-                    Output.printMessage("Setup.1", true);
+                    Output.printMessage("Setup.1", true, true);
                     System.exit(1);
                 }
             } else {
@@ -33,9 +80,94 @@ public class Setup {
             }
 
             if (!line.matches(regex)) {
-                Output.printMessage("Setup.1", true);
+                Output.printMessage("Setup.1", true, true);
                 System.exit(1);
+            }
+
+            for (char c: line.toCharArray()) {  //Check for multiple Ants of the same name
+                if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z')) {
+                    String tmp = "";
+                    tmp += Character.toLowerCase(c);
+                    if (ants.contains(tmp)) {
+                        Output.printMessage("Setup.1", true, true);
+                        System.exit(1);
+                    }
+                    ants += tmp;
+                }
             }
         }
     }
+
+    private static void interlinkRows(Field topLeft) {
+        Field currentRowLeft = topLeft;
+        Field nextRowLeft;
+        Field currentField;
+        Field nextRowField;
+        while (currentRowLeft.getSouth() != null) {
+            nextRowLeft = currentRowLeft.getSouth();
+            currentField = currentRowLeft;
+            nextRowField = nextRowLeft;
+
+            while (currentField.getEast() != null) {
+                currentField.setSouth(nextRowField);
+                nextRowField.setNorth(currentField);
+
+                currentField = currentField.getEast();
+                nextRowField = nextRowField.getEast();
+            }
+            currentRowLeft = nextRowLeft;
+        }
+    }
+
+
+    private static Field createField(char descr, int line, int pos) {
+        Field newField = null;
+
+        if (descr == '*') {
+            newField = new Field(0, true, false, null, line, pos);
+        }
+        if ('0' <= descr && '5' > descr) {
+            int color = Character.getNumericValue(descr);
+            newField = new Field(color, false, false, null, line, pos);
+        }
+        if ('a' <= descr && 'h' >= descr) {
+            StandardAnt newAnt = new StandardAnt(180, descr);
+            Main.addAnt(newAnt);
+            newField = new Field(0, false, true, newAnt, line, pos);
+            newAnt.setPosition(newField);
+        }
+        if ('i' <= descr && 'q' >= descr) {
+            SportyAnt newAnt = new SportyAnt(180, descr, Main.getSpeed());
+            Main.addAnt(newAnt);
+            newField = new Field(0, false, true, newAnt, line, pos);
+            newAnt.setPosition(newField);
+        }
+        if ('r' <= descr && 'z' >= descr) {
+            LazyAnt newAnt = new LazyAnt(180, descr, Main.getSpeed());
+            Main.addAnt(newAnt);
+            newField = new Field(0, false, true, newAnt, line, pos);
+            newAnt.setPosition(newField);
+        }
+        if ('A' <= descr && 'H' >= descr) {
+            StandardAnt newAnt = new StandardAnt(0, descr);
+            Main.addAnt(newAnt);
+            newField = new Field(0, false, true, newAnt, line, pos);
+            newAnt.setPosition(newField);
+        }
+        if ('I' <= descr && 'Q' >= descr) {
+            SportyAnt newAnt = new SportyAnt(0, descr, Main.getSpeed());
+            Main.addAnt(newAnt);
+            newField = new Field(0, false, true, newAnt, line, pos);
+            newAnt.setPosition(newField);
+        }
+        if ('R' <= descr && 'Z' >= descr) {
+            LazyAnt newAnt = new LazyAnt(0, descr, Main.getSpeed());
+            Main.addAnt(newAnt);
+            newField = new Field(0, false, true, newAnt, line, pos);
+            newAnt.setPosition(newField);
+        }
+
+        return newField;
+    }
+
 }
