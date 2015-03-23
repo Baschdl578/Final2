@@ -50,23 +50,17 @@ public class Field {
         return (!isObstacle && !isOccupied);
     }
 
+    /**
+     * Applies the new color to the Field when entered
+     */
     public void reColor() {
         this.color = (4 * this.color + 23) % 5;
     }
 
-
-    public int getColor() {
-        return color;
-    }
-
     /**
-     * Sets the initial color
-     * @param color initial color
+     * Returns a String representation of the Field
+     * @return Ant if this is occupied, "*" if obstacle or color if empty
      */
-    public void setColor(int color) {
-        this.color = color;
-    }
-
     public String toString() {
         if (isObstacle) return "*";
         if (isOccupied) return occupiedBy.toString();
@@ -74,63 +68,129 @@ public class Field {
         return Integer.toString(color);
     }
 
-    public Ant getOccupiedBy() {
-        return occupiedBy;
-    }
 
+//GETTER AND SETTER:
+    /**
+     * Puts a new Ant on this Field
+     * @param occupiedBy Ant to put here
+     */
     public void setOccupiedBy(Ant occupiedBy) {
         this.isOccupied = (occupiedBy != null);
         this.occupiedBy = occupiedBy;
     }
 
+    /**
+     * Gets the Color of the Field
+     * @return Color as integer
+     */
+    public int getColor() {
+        return color;
+    }
+
+    /**
+     * Returns the Field north of this
+     * @return Field north of this
+     */
     public Field getNorth() {
         return north;
     }
 
+    /**
+     * Returns the Field north of this
+     * @param north Field north of this
+     */
     public void setNorth(Field north) {
         this.north = north;
     }
 
+    /**
+     * Returns the Field northeast of this
+     * @return Field northeast of this
+     */
     public Field getNortheast() {
+        if (this.north == null) return null;
         return north.getEast();
     }
 
+    /**
+     * Returns the Field east of this
+     * @return Field east of this
+     */
     public Field getEast() {
         return east;
     }
 
+    /**
+     * Sets the Field east of this
+     * @param east Field east of this
+     */
     public void setEast(Field east) {
         this.east = east;
     }
 
+    /**
+     * Returns the Field southeast of this
+     * @return Field southeast of this
+     */
     public Field getSoutheast() {
+        if (this.south == null) return null;
         return south.getEast();
     }
 
+    /**
+     * Returns the Field south of this
+     * @return Field south of this
+     */
     public Field getSouth() {
         return south;
     }
 
+    /**
+     * Sets the Field south of this
+     * @param south Field south of this
+     */
     public void setSouth(Field south) {
         this.south = south;
     }
 
+    /**
+     * Returns the Field southwest of this
+     * @return Field southwest of this
+     */
     public Field getSouthwest() {
+        if (this.south == null) return null;
         return south.getWest();
     }
 
+    /**
+     * Returns the Field west of this
+     * @return Field west of this
+     */
     public Field getWest() {
         return west;
     }
 
+    /**
+     * Sets the Field west of this
+     * @param west Field west of this
+     */
     public void setWest(Field west) {
         this.west = west;
     }
 
+    /**
+     * Returns the Field northwest of this
+     * @return Field northwest of this
+     */
     public Field getNortwest() {
+        if (this.north == null) return null;
         return north.getWest();
     }
 
+    /**
+     * Gets the coordinates of this field
+     * @return Coordinates as an int Array int[row][column]
+     */
     public int[] getCoordinates() {
         return coordinates;
     }

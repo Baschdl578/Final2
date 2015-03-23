@@ -41,7 +41,7 @@ public abstract class Ant implements Comparable<Ant> {
     }
 
     /**
-     * Moves the Ant
+     * Moves the Ant according to its Type
      */
     public abstract void move();
 
@@ -67,6 +67,10 @@ public abstract class Ant implements Comparable<Ant> {
         this.position.reColor();
     }
 
+    /**
+     * Gets the next Field when the Ant makes a Step
+     * @return
+     */
     private Field getNextField() {
         Field next;
         switch (direction) {
@@ -124,6 +128,10 @@ public abstract class Ant implements Comparable<Ant> {
         return "-1";
     }
 
+    /**
+     * Returns a String representation of the Ant
+     * @return Name of the Ant
+     */
     public String toString() {
         return "" + this.name;
     }
@@ -131,28 +139,27 @@ public abstract class Ant implements Comparable<Ant> {
 
 //GETTER AND SETTER:
 
-
+    /**
+     * Gets the position of the Ant
+     * @return Field the Ant is on
+     */
     public Field getPosition() {
         return position;
     }
 
+    /**
+     * Sets the Position the Ant is on
+     * @param position Field the Ant is on
+     */
     public void setPosition(Field position) {
         this.position = position;
     }
 
-    public int getDirection() {
-        return direction;
-    }
-
-    public void setDirection(int direction) {
-        this.direction = direction;
-    }
-
+    /**
+     * Gets the Name of the Ant
+     * @return Name of the ant as char
+     */
     public char getName() {
         return name;
-    }
-
-    public void setName(char name) {
-        this.name = name;
     }
 }

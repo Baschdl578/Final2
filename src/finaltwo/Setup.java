@@ -13,7 +13,6 @@ import finaltwo.messages.Output;
  * @version 1.0
  */
 public class Setup {
-
     private static String[] file;
 
     /**
@@ -30,20 +29,23 @@ public class Setup {
         for (int i = 0; i < file.length; i++) {
             int j = 0;
             current = topLeft;
-            while (j < i && current != null) {
+            Field topRow = current;
+            while (j < i - 1 && current != null) {
+                topRow = topRow.getSouth();
                 current = current.getSouth();
                 j++;
+            }
+            if (current != null) {
+                current = current.getSouth();
             }
             char[] chars = file[i].toCharArray();
             for (int k = 0; k < chars.length; k++) {
                 Field newField = createField(chars[k], i, k);
-                if (k == 0 && topLeft != null) {
-                    Field left = topLeft;
-                    while (left.getSouth() != null) {
-                        left = left.getSouth();
-                    }
-                    newField.setNorth(left);
-                    left.setSouth(newField);
+
+                if (topRow != null) {
+                    newField.setNorth(topRow);
+                    topRow.setSouth(newField);
+                    topRow = topRow.getEast();
                 }
 
                 if (k != 0) {
@@ -57,7 +59,7 @@ public class Setup {
                 current = newField;
             }
         }
-        interlinkRows(topLeft);
+        //interlinkRows(topLeft);
         return topLeft;
     }
 
@@ -98,7 +100,11 @@ public class Setup {
         }
     }
 
-    private static void interlinkRows(Field topLeft) {
+    /**
+     * Setup() sets north/south links in the first column. this interlinks the rest
+     * @param topLeft topLeft Field
+     */
+/*    private static void interlinkRows(Field topLeft) {
         Field currentRowLeft = topLeft;
         Field nextRowLeft;
         Field currentField;
@@ -108,7 +114,7 @@ public class Setup {
             currentField = currentRowLeft;
             nextRowField = nextRowLeft;
 
-            while (currentField.getEast() != null) {
+            while (currentField != null) {
                 currentField.setSouth(nextRowField);
                 nextRowField.setNorth(currentField);
 
@@ -118,8 +124,14 @@ public class Setup {
             currentRowLeft = nextRowLeft;
         }
     }
-
-
+*/
+    /**
+     * Creates and returns a new Field. Also creates an Ants and places it on it if neccessary
+     * @param descr Field descriptor
+     * @param line for positioning
+     * @param pos for positioning
+     * @return created Field
+     */
     private static Field createField(char descr, int line, int pos) {
         Field newField = null;
 
@@ -137,13 +149,13 @@ public class Setup {
             newAnt.setPosition(newField);
         }
         if ('i' <= descr && 'q' >= descr) {
-            SportyAnt newAnt = new SportyAnt(180, descr, Main.getSpeed());
+            SportyAnt newAnt = new SportyAnt(180, descr);
             Main.addAnt(newAnt);
             newField = new Field(0, false, true, newAnt, line, pos);
             newAnt.setPosition(newField);
         }
         if ('r' <= descr && 'z' >= descr) {
-            LazyAnt newAnt = new LazyAnt(180, descr, Main.getSpeed());
+            LazyAnt newAnt = new LazyAnt(180, descr);
             Main.addAnt(newAnt);
             newField = new Field(0, false, true, newAnt, line, pos);
             newAnt.setPosition(newField);
@@ -155,13 +167,13 @@ public class Setup {
             newAnt.setPosition(newField);
         }
         if ('I' <= descr && 'Q' >= descr) {
-            SportyAnt newAnt = new SportyAnt(0, descr, Main.getSpeed());
+            SportyAnt newAnt = new SportyAnt(0, descr);
             Main.addAnt(newAnt);
             newField = new Field(0, false, true, newAnt, line, pos);
             newAnt.setPosition(newField);
         }
         if ('R' <= descr && 'Z' >= descr) {
-            LazyAnt newAnt = new LazyAnt(0, descr, Main.getSpeed());
+            LazyAnt newAnt = new LazyAnt(0, descr);
             Main.addAnt(newAnt);
             newField = new Field(0, false, true, newAnt, line, pos);
             newAnt.setPosition(newField);

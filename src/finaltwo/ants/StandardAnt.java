@@ -1,6 +1,5 @@
 package finaltwo.ants;
 
-import finaltwo.Field;
 
 /**
  * Created by Sebastian on 19-Mar-15
@@ -9,8 +8,6 @@ import finaltwo.Field;
  * @version 1.0
  */
 public class StandardAnt extends Ant {
-    private int direction; //0 is facing north
-    private Field position;
 
     /**
      * Constructor for manual creation with speed set

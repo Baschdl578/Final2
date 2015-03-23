@@ -16,6 +16,9 @@ import finaltwo.messages.Output;
  */
 public class Interactive {
 
+    /**
+     * Waits for Input and calls appropriate Methods
+     */
     public static void getInput() {
         String[] input = Terminal.readLine().split(" ");
 
@@ -79,6 +82,10 @@ public class Interactive {
         getInput();
     }
 
+    /**
+     * Gets and prints the Position of an Ant
+     * @param arg Ant's name from Terminal
+     */
     private static void position(String arg) {
         if (arg.length() != 1) {
             Output.printMessage("Interactive.3", true, false);
@@ -92,6 +99,10 @@ public class Interactive {
         }
     }
 
+    /**
+     * Gets and prints the direction of an Ant
+     * @param arg Ant's name
+     */
     private static void direction(String arg) {
         if (arg.length() != 1) {
             Output.printMessage("Interactive.3", true, false);
@@ -103,6 +114,10 @@ public class Interactive {
         }
     }
 
+    /**
+     * Creates an Ant
+     * @param arg <i>Ant's name</i>,<i>line</i>,<i>row</i>
+     */
     private static void create(String arg) {
         String[] args = arg.split(",");
         if (args.length != 3 || args[0].length() != 1) {
@@ -129,13 +144,13 @@ public class Interactive {
             putOn.setOccupiedBy(newAnt);
         }
         if ('i' <= descr && 'q' >= descr) {
-            SportyAnt newAnt = new SportyAnt(180, descr, Main.getSpeed());
+            SportyAnt newAnt = new SportyAnt(180, descr);
             Main.addAnt(newAnt);
             newAnt.setPosition(putOn);
             putOn.setOccupiedBy(newAnt);
         }
         if ('r' <= descr && 'z' >= descr) {
-            LazyAnt newAnt = new LazyAnt(180, descr, Main.getSpeed());
+            LazyAnt newAnt = new LazyAnt(180, descr);
             Main.addAnt(newAnt);
             newAnt.setPosition(putOn);
             putOn.setOccupiedBy(newAnt);
@@ -147,13 +162,13 @@ public class Interactive {
             putOn.setOccupiedBy(newAnt);
         }
         if ('I' <= descr && 'Q' >= descr) {
-            SportyAnt newAnt = new SportyAnt(0, descr, Main.getSpeed());
+            SportyAnt newAnt = new SportyAnt(0, descr);
             Main.addAnt(newAnt);
             newAnt.setPosition(putOn);
             putOn.setOccupiedBy(newAnt);
         }
         if ('R' <= descr && 'Z' >= descr) {
-            LazyAnt newAnt = new LazyAnt(0, descr, Main.getSpeed());
+            LazyAnt newAnt = new LazyAnt(0, descr);
             Main.addAnt(newAnt);
             newAnt.setPosition(putOn);
             putOn.setOccupiedBy(newAnt);

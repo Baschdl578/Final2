@@ -20,7 +20,7 @@ public class Output {
     private ResourceBundle resourceBundle;
 
     /**
-     * Constructor
+     * Constructor, Gets the appropriate ressource Bundle, defaults to English
      */
     public Output() {
         Locale local = Locale.getDefault();

@@ -20,19 +20,19 @@ public class Main {
     private static LinkedList<Ant> ants = new LinkedList<Ant>(); //Sorted by alphabet
     private static int speed = 2;
     private static Field topLeft;
-    private static String rule = "270-90-315-45-90";
 
+    /**
+     * Gets the turning rules
+     * @return Turning rules as TurningRule object
+     */
     public static TurningRule getTurningRules() {
-        if (rules == null) {
-            rules = new TurningRule(rule);
-        }
-        return new TurningRule(rule);
+        return rules;
     }
 
-    public static LinkedList<Ant> getAnts() {
-        return ants;
-    }
-
+    /**
+     * Deletes an Ant, exits if no Ants are in the game
+     * @param ant Ant to delete
+     */
     public static void deleteAnt(Ant ant) {
         if (!ants.contains(ant)) {
             Output.printMessage("Main.6", true, false);
@@ -45,6 +45,11 @@ public class Main {
         }
     }
 
+    /**
+     * Gets an Ant from it's name
+     * @param ant Name of the Ant
+     * @return Ant
+     */
     public static Ant getAnt(String ant) {
         char name = ant.charAt(0);
         ListIterator<Ant> iter = ants.listIterator();
@@ -59,16 +64,29 @@ public class Main {
         return null;
     }
 
+    /**
+     * Adds an Ant to the List
+     * @param a Ant to add
+     */
     public static void addAnt(Ant a) {
         ants.addFirst(a);
-        Collections.sort(ants); //Just inserting and sorting afterwards should not create as much performance loss
+        Collections.sort(ants); //Just inserting and sorting afterwards should not create much performance loss
                                 //We're just doing this 26 times MAX
     }
 
+    /**
+     * Returns the Speedup factor of this game
+     * @return Speedup factor  as integer
+     */
     public static int getSpeed() {
         return speed;
     }
 
+    /**
+     * Returns a Field from its coordinates
+     * @param coord coordinates in this format: <i>line</i>,<i>row</i>
+     * @return Field with the given coordinates or null if invalid coordinates
+     */
     public static Field getField(String coord) {
         int[] coordinates = new int[2];
         try {
@@ -102,6 +120,10 @@ public class Main {
         return out;
     }
 
+    /**
+     * Performs the given number of moves for every Ant
+     * @param moves Number of moves
+     */
     public static void move(int moves) {
         for (int i = 0; i < moves; i++) {
             for (Ant a: ants) {
@@ -110,6 +132,10 @@ public class Main {
         }
     }
 
+    /**
+     * Returns a String representation of every Ant, seperated by a comma
+     * @return String with every Ant's name
+     */
     public static String getStringAnts() {
         ListIterator<Ant> iter = ants.listIterator();
         String out = "";
@@ -121,10 +147,16 @@ public class Main {
         return out;
     }
 
+    /**
+     * Prints every Ant's name, seperated by a comma
+     */
     public static void printAnts() {
         Terminal.printLine(getStringAnts());
     }
 
+    /**
+     * Prints the game board
+     */
     public static void printGame() {
         String out = "";
 
@@ -148,10 +180,12 @@ public class Main {
 
     /**
      * Main method
-     * Checks arguments and starts interactive interface
+     * Checks arguments, sets everything up and starts interactive interface
      * @param args Arguments from command line
      */
     public static void main(String[] args) {
+        String rule = "270-90-315-45-90";
+
         if (args.length == 0) {
             Output.printMessage("Main.1", true, true);
             System.exit(1);
@@ -205,6 +239,7 @@ public class Main {
                 }
             }
         }
+        rules = new TurningRule(rule);
         topLeft = Setup.setup(args[0]);
         Interactive.getInput();
     }

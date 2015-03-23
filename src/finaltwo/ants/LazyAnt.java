@@ -1,5 +1,7 @@
 package finaltwo.ants;
 
+import finaltwo.Main;
+
 /**
  * Created by Sebastian on 19-Mar-15
  *
@@ -7,33 +9,27 @@ package finaltwo.ants;
  * @version 1.0
  */
 public class LazyAnt extends Ant {
-    private int speed;
     private int turnSinceLastMove;
 
-
-    public LazyAnt(int direction, char name, int speed) {
+    /**
+     * Constructs a new Lazy Ant
+     * @param direction Initial direction o the Ant
+     * @param name Name of the Ant
+     */
+    public LazyAnt(int direction, char name) {
         super(direction, name);
-        this.speed = speed;
-        turnSinceLastMove = speed;
+        turnSinceLastMove = Main.getSpeed();
     }
 
     /**
      * Moves the Ant
      */
     public void move() {
-        if (speed == turnSinceLastMove) {
+        if (Main.getSpeed() == turnSinceLastMove) {
             turnSinceLastMove = 1;
             step();
         } else {
             turnSinceLastMove++;
         }
-    }
-
-    public int getSpeed() {
-        return speed;
-    }
-
-    public void setSpeed(int speed) {
-        this.speed = speed;
     }
 }

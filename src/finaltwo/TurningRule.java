@@ -18,17 +18,17 @@ public class TurningRule {
      */
     public TurningRule(String rules) {
         String[] rule = rules.split("-");
-        int[] turns = new int[5];
 
         if (rule.length != 5) {
             Output.printMessage("Rules.1", true, true);
             System.exit(1);
         }
 
+        turningRule = new int[5];
         for (int i = 0; i < 5; i++) {
             try {
-                turns[i] = Integer.parseInt(rule[i]);
-                if (turns[i] != 45 && turns[i] != 90 && turns[i] != 270 && turns[i] != 315) {
+                turningRule[i] = Integer.parseInt(rule[i]);
+                if (turningRule[i] != 45 && turningRule[i] != 90 && turningRule[i] != 270 && turningRule[i] != 315) {
                     Output.printMessage("Rules.1", true, true);
                     System.exit(1);
                 }
@@ -46,7 +46,7 @@ public class TurningRule {
      * @return new Direction
      */
     public int getNewDirection(int color, int oldRot) {
-        int newRot = oldRot + turningRule[color];
+        int newRot = oldRot + this.turningRule[color];
         if (newRot >= 360) {
             newRot -= 360;
         }
